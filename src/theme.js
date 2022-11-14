@@ -48,19 +48,25 @@ export const color = () => ({
         900: "#2c100f",
     },
     blueAccent: {
-        100: "#e1e2fe",
-        200: "#c3c6fd",
-        300: "#a4a9fc",
-        400: "#868dfb",
-        500: "#6870fa",
+        100: "#E3F2FD",
+        200: "#90CAF9",
+        300: "#2196F3",
+        400: "#1E88E5",
+        500: "#1565C0",
         600: "#535ac8",
         700: "#3e4396",
         800: "#2a2d64",
         900: "#151632",
     },
-    other:{
-        "color1":"#080c14",
-        "color2":"#ffffff"
+    other: {
+        "color1": "#000000",
+        "color2": "#ffffff",
+        "color3": "#191c24",
+        "color4": "#2a3038",
+        "color5": "#FAFAFA",
+        "color6": "#F5F5F5",
+        "color7": "#EEEEEE"
+
     }
 
 });
@@ -72,11 +78,11 @@ export const themeSettings = () => {
         palette: {
 
             primary: {
-                main: colors.primary[500],
-                dark: colors.other["color1"]
+                main:colors.blueAccent["300"]
+
             },
             secondary: {
-                main: colors.greenAccent[500],
+                main: "#9806c4",
             },
             neutral: {
                 dark: colors.grey[700],
@@ -84,7 +90,7 @@ export const themeSettings = () => {
                 light: colors.grey[100],
             },
             background: {
-                default: colors.primary[500],
+                default: colors.blueAccent["100"],
             }
 
 
@@ -117,10 +123,18 @@ export const themeSettings = () => {
                 fontSize: 14,
             },
         },
+        breakpoints: {
+            values: {
+                mobile: 0,
+                tablet: 640,
+                laptop: 1024,
+                desktop: 1200,
+            }
+        }
     };
 };
 
 
 export const useTheme = () => {
-    return  createTheme(themeSettings());
+    return createTheme(themeSettings());
 };

@@ -1,21 +1,22 @@
-import { useState } from "react";
+import React,{ useState } from "react";
 import { ProSidebar, Menu, MenuItem } from "react-pro-sidebar";
-import { Box, IconButton, Typography, useTheme } from "@mui/material";
+import { Box, IconButton, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
 import "react-pro-sidebar/dist/css/styles.css";
 import { color } from "../../theme";
-import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import imag1 from  "../../assets/profile1.png"
+
+
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
-    const theme = useTheme();
     const colors = color();
     return (
         <MenuItem
             active={selected === title}
             style={{
-                color: colors.grey[200],
+                color: colors.grey[100],
             }}
             onClick={() => setSelected(title)}
             icon={icon}
@@ -28,7 +29,6 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
 
 const Sidebar = () => {
     const colors = color();
-    const theme = useTheme();
     const [isCollapsed, setIsCollapsed] = useState(false);
     const [selected, setSelected] = useState("Dashboard");
 
@@ -67,7 +67,7 @@ const Sidebar = () => {
                                 display="flex"
                                 justifyContent="space-between"
                                 alignItems="center"
-                                ml="60px"
+                                ml="80px"
                             >
                                 <Typography variant="h3" color={colors.grey[100]}>
                                     ADMIN
@@ -86,7 +86,7 @@ const Sidebar = () => {
                                     alt="profile-user"
                                     width="100px"
                                     height="100px"
-                                    src={`../../assets/user.png`}
+                                    src={imag1}
                                     style={{ cursor: "pointer", borderRadius: "50%" }}
                                 />
                             </Box>

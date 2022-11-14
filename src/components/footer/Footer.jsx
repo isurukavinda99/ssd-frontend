@@ -1,21 +1,23 @@
-import {Box, IconButton, useTheme} from "@mui/material";
-import {ColorModeContext, color} from "../../theme";
-import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
-import CopyrightIcon from '@mui/icons-material/Copyright';
+import React, { Component }  from 'react';
+import {Box} from "@mui/material";
+import {color} from "../../theme";
+
+
 
 const Header = () => {
-    const theme = useTheme();
     const colors = color();
     let date  = new Date().getFullYear();
+
     return (
 
 
-            <Box display="flex" justifyContent="center" p={2} style={{color: colors.grey["100"]}}>
+        <Box display="flex" justifyContent="center" p={2} style={{color: colors.grey["900"],marginTop:"180px"}}>
                 <Box display="flex">
-                    <CopyrightIcon/>
-                   <h5>All rights reserved  {date}</h5>
+                   <h4>All rights reserved  {date}</h4>
                 </Box>
-            </Box>
+        </Box>
+
+
 
     );
 };

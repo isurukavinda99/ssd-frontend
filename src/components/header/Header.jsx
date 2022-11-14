@@ -1,10 +1,10 @@
-import {Box, IconButton, useTheme} from "@mui/material";
-import {ColorModeContext, color} from "../../theme";
+import React, { Component }  from 'react';
+import {Box, IconButton} from "@mui/material";
+import {color} from "../../theme";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 
 
 const Header = () => {
-    const theme = useTheme();
     const colors = color();
 
     return (
@@ -16,7 +16,7 @@ const Header = () => {
 
             <Box display="flex" justifyContent="space-between" p={2}>
                 <Box display="flex">
-                    <IconButton style={{color: colors.grey["100"]}}>
+                    <IconButton style={{color: colors.grey["900"]}}>
                         <SettingsOutlinedIcon/>
                     </IconButton>
                 </Box>
