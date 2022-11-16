@@ -9,7 +9,7 @@ import Footer from "./components/footer/Footer";
 import Login from "./pages/login/Login";
 import Message from "./pages/message/Message"
 import AddFile from "./pages/file/FileUpload"
-
+import AuthVerify from "./apis/validate"
 //layout to add navigation bars
 const MainLayout = () => {
     return (
@@ -30,7 +30,7 @@ const MainLayout = () => {
 
 //check user type to navigate
 const AuthLayout = ({allowedRoles}) => {
-
+    AuthVerify()
     const user = JSON.parse(localStorage.getItem('role')) || [];
     const [role] = useState(user);
     const location = useLocation();
