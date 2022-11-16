@@ -1,51 +1,60 @@
-import React, { Component }  from 'react';
-import { Box, Button, TextField,Select,MenuItem,InputLabel,TextareaAutosize   } from "@mui/material";
+import React  from 'react';
+import { Box, Button, TextField} from "@mui/material";
 import { Formik } from "formik";
 import * as yup from "yup";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { color } from "../../theme";
-import {light} from "@mui/material/styles/createPalette";
-import imag from "../../assets/log.jpg";
+import {file} from "../../apis/file";
+import {toast, ToastContainer} from "react-toastify";
 
+//upload new file
 const FileUpload = () => {
     const isNonMobile = useMediaQuery("(min-width:600px)");
     const colors = color();
 
-    const styles = theme => ({
-        select: {
-            '&:before': {
-                borderColor: color,
-            },
-            '&:after': {
-                borderColor: color,
-            }
-        },
-        icon: {
-            fill: color,
-        },
-    });
-
-
 
     const handleFormSubmit = (values) => {
-        console.log(values);
+        file(values).then(() => {
+            toast.success('🦄 New File Added!', {
+                position: "top-right",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+            });
+        }).catch(()=>{
+            toast.error('🦄 Error', {
+                position: "top-right",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+            });
+        })
+
     };
 
     return (
         <Box  p={10} style={{backgroundColor:colors.other["color6"],marginLeft:"30%",width:"40%"}} sx={{ boxShadow: 3 }}>
-            <h2 style={{color:colors.other["color1"]}} align={"center"}>Create Message</h2>
-
+            <h2 style={{color:colors.other["color1"]}} align={"center"}>Add File</h2>
+            <ToastContainer/>
             <Formik
                 onSubmit={handleFormSubmit}
                 initialValues={initialValues}
                 validationSchema={checkoutSchema}
             >
                 {({
-                      values,
+
                       errors,
                       touched,
                       handleBlur,
-                      handleChange,
+                      setFieldValue,
                       handleSubmit,
                   }) => (
                     <form onSubmit={handleSubmit} >
@@ -57,40 +66,21 @@ const FileUpload = () => {
                                 "& > div": { gridColumn: isNonMobile ? undefined : "span 3" },
                             }}
                         >
-
                             <TextField
-                                type="text"
-                                label="Message Title"
+                                type="file"
                                 onBlur={handleBlur}
-                                onChange={handleChange}
-                                value={values.userName}
-                                name="msgTitle"
-                                error={!!touched.msgTitle && !!errors.msgTitle}
-                                helperText={touched.msgTitle && errors.msgTitle}
+                                onChange={(event) => {
+                                    setFieldValue("file", event.currentTarget.files[0]);
+                                }}
+                                name="file"
+                                error={!!touched.file && !!errors.file}
+                                helperText={touched.file && errors.file}
                                 sx={{ gridColumn: "span 2"}}
                                 variant="filled"
                                 InputProps={{ disableUnderline: true }}
                                 color="secondary"
-                                autoComplete="off"
                                 style = {{width: "100%"}}
 
-                            />
-                            <TextField
-                                type="text"
-                                label="Content"
-                                multiline
-                                onBlur={handleBlur}
-                                onChange={handleChange}
-                                value={values.content}
-                                name="content"
-                                error={!!touched.content && !!errors.content}
-                                helperText={touched.content && errors.content}
-                                sx={{ gridColumn: "span 2"}}
-                                variant="filled"
-                                InputProps={{ disableUnderline: true }}
-                                color="secondary"
-                                autoComplete="off"
-                                style = {{width: "100%"}}
                             />
 
                         </Box>
@@ -108,13 +98,19 @@ const FileUpload = () => {
 
 
 const checkoutSchema = yup.object().shape({
-    msgTitle: yup.string().required('Required'),
-    content: yup.string().required('Required')
+    file: yup
+        .mixed()
+        .required("A file is required")
+        .test(
+            "fileSize",
+            "File too large",
+            value => value && value.size <= (16*1024*1024)
+        )
+
 
 });
 const initialValues = {
-    msgTitle: "",
-    content: "",
+    file:null
 };
 
 export default FileUpload;

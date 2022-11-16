@@ -1,10 +1,10 @@
-import React, { Component }  from 'react';
+import React from 'react';
 import {Box} from "@mui/material";
 import {color} from "../../theme";
 
 
-
-const Header = () => {
+//Footer component
+const Footer = () => {
     const colors = color();
     let date  = new Date().getFullYear();
 
@@ -22,4 +22,4 @@ const Header = () => {
     );
 };
 
-export default Header;
+export default Footer;

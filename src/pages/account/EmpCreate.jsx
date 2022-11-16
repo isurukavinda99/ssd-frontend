@@ -1,38 +1,49 @@
-import React, { Component }  from 'react';
-import { Box, Button, TextField,Select,MenuItem,InputLabel   } from "@mui/material";
+import React  from 'react';
+import { Box, Button, TextField,Select,MenuItem  } from "@mui/material";
 import { Formik } from "formik";
 import * as yup from "yup";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { color } from "../../theme";
+import {register} from "../../apis/auth";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
+//Add new employee
 const FormEmp = () => {
     const isNonMobile = useMediaQuery("(min-width:600px)");
     const colors = color();
 
-    const styles = theme => ({
-        select: {
-            '&:before': {
-                borderColor: color,
-            },
-            '&:after': {
-                borderColor: color,
-            }
-        },
-        icon: {
-            fill: color,
-        },
-    });
-
-
 
     const handleFormSubmit = (values) => {
-        console.log(values);
+        register(values).then(() => {
+            toast.success('🦄 New Employee Added!', {
+                position: "top-right",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+            });
+        }).catch(()=>{
+            toast.error('🦄 Error', {
+                position: "top-right",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "colored",
+            });
+        })
     };
 
     return (
         <Box m="20px" p="40px" style={{backgroundColor:colors.other["color6"]}} sx={{ boxShadow: 3 }}>
            <h2 style={{color:colors.other["color1"]}} align={"center"}>New Employee Account</h2>
-
+            <ToastContainer/>
             <Formik
                 onSubmit={handleFormSubmit}
                 initialValues={initialValues}

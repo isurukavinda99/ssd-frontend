@@ -1,16 +1,16 @@
-import React,{ useState } from "react";
-import { ProSidebar, Menu, MenuItem } from "react-pro-sidebar";
-import { Box, IconButton, Typography } from "@mui/material";
-import { Link } from "react-router-dom";
+import React, {useState} from "react";
+import {ProSidebar, Menu, MenuItem} from "react-pro-sidebar";
+import {Box, IconButton, Typography} from "@mui/material";
+import {Link} from "react-router-dom";
 import "react-pro-sidebar/dist/css/styles.css";
-import { color } from "../../theme";
+import {color} from "../../theme";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import imag1 from  "../../assets/profile1.png"
+import imag1 from "../../assets/profile1.png"
 
 
-
-const Item = ({ title, to, icon, selected, setSelected }) => {
+//Side Navigation Component
+const Item = ({title, to, icon, selected, setSelected}) => {
     const colors = color();
     return (
         <MenuItem
@@ -22,7 +22,7 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
             icon={icon}
         >
             <Typography>{title}</Typography>
-            <Link to={to} />
+            <Link to={to}/>
         </MenuItem>
     );
 };
@@ -31,7 +31,8 @@ const Sidebar = () => {
     const colors = color();
     const [isCollapsed, setIsCollapsed] = useState(false);
     const [selected, setSelected] = useState("Dashboard");
-
+    const user = JSON.parse(localStorage.getItem('role')) || [];
+    const [role] = useState(user);
     return (
         <Box
             sx={{
@@ -56,7 +57,7 @@ const Sidebar = () => {
                 <Menu iconShape="square">
                     <MenuItem
                         onClick={() => setIsCollapsed(!isCollapsed)}
-                        icon={isCollapsed ? <MenuOutlinedIcon /> : undefined}
+                        icon={isCollapsed ? <MenuOutlinedIcon/> : undefined}
                         style={{
                             margin: "10px 0 20px 0",
                             color: colors.other["color2"],
@@ -67,13 +68,23 @@ const Sidebar = () => {
                                 display="flex"
                                 justifyContent="space-between"
                                 alignItems="center"
-                                ml="80px"
+                                ml="88px"
                             >
-                                <Typography variant="h3" color={colors.grey[100]}>
-                                    ADMIN
-                                </Typography>
+                                {role.includes("ROLE_ADMIN")
+                                    ? (<Typography variant="h3" color={colors.grey[100]}>
+                                        ADMIN
+                                    </Typography>) :
+                                    (role.includes("ROLE_MANAGER"))
+                                        ? (<Typography variant="h3" color={colors.grey[100]}>
+                                            Manager
+                                        </Typography>) :
+                                        (<Typography variant="h3" color={colors.grey[100]}>
+                                            User
+                                        </Typography>)
+
+                                }
                                 <IconButton onClick={() => setIsCollapsed(!isCollapsed)}>
-                                    <MenuOutlinedIcon />
+                                    <MenuOutlinedIcon/>
                                 </IconButton>
                             </Box>
                         )}
@@ -87,22 +98,37 @@ const Sidebar = () => {
                                     width="100px"
                                     height="100px"
                                     src={imag1}
-                                    style={{ cursor: "pointer", borderRadius: "50%" }}
+                                    style={{cursor: "pointer", borderRadius: "50%"}}
                                 />
                             </Box>
                         </Box>
                     )}
 
                     <Box paddingLeft={isCollapsed ? undefined : "10%"}>
-                        <Item
+                        {role.includes("ROLE_ADMIN")
+                            ? (<Item
                             title="Create Account"
                             to="/create-acc"
-                            icon={<AccountCircleIcon />}
+                            icon={<AccountCircleIcon/>}
                             selected={selected}
                             setSelected={setSelected}
-                        />
+                        />):(role.includes("ROLE_MANAGER")||role.includes("ROLE_USER"))?(
+                        <Item
+                            title="Add Message"
+                            to="/create-msg"
+                            icon={<AccountCircleIcon/>}
+                            selected={selected}
+                            setSelected={setSelected}
+                        />):(<></>)}
 
-
+                        {role.includes("ROLE_MANAGER")?(
+                        <Item
+                            title="Add file"
+                            to="/file"
+                            icon={<AccountCircleIcon/>}
+                            selected={selected}
+                            setSelected={setSelected}
+                        />):(<></>)}
                     </Box>
                 </Menu>
             </ProSidebar>

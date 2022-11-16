@@ -1,37 +1,65 @@
-import React, { Component }  from 'react';
-import { Box, Button, TextField,Select,MenuItem,InputLabel,Card,Avatar,Paper,Typography,CardContent,CardActions } from "@mui/material";
+import React from 'react';
+import { Box, Button, TextField} from "@mui/material";
 import { Formik } from "formik";
 import * as yup from "yup";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { color } from "../../theme";
 import imag from  "../../assets/log.jpg"
+import {login} from "../../apis/auth"
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { useNavigate } from "react-router-dom";
 
+//login form
 const Login = () => {
     const isNonMobile = useMediaQuery("(min-width:600px)");
     const colors = color();
-
-    const styles = theme => ({
-        select: {
-            '&:before': {
-                borderColor: color,
-            },
-            '&:after': {
-                borderColor: color,
-            }
-        },
-        icon: {
-            fill: color,
-        },
-    });
-
-
+    const navigate = useNavigate();
 
     const handleFormSubmit = (values) => {
-        console.log(values);
+        login(values).then(r => {
+            if(r.roles.includes("ROLE_ADMIN"))
+            {
+                navigate("/create-acc");
+            }
+            else if(r.roles.includes("ROLE_MANAGER"))
+            {
+                navigate("/file");
+            }
+            else if(r.roles.includes("ROLE_USER"))
+            {
+                navigate("/create-msg");
+            }
+            else {
+                localStorage.removeItem("token");
+                localStorage.removeItem("role");
+                navigate("/");
+            }
+            console.log(r)
+        }).catch(()=>{
+            showToastMessage();
+        })
     };
 
-    return (
+    const showToastMessage = () => {
+        toast.error('Login Error !');
+    };
 
+
+    return (
+        <div>
+            <ToastContainer
+                position="top-right"
+                autoClose={3000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="colored"
+            />
         <Box  p={10} style={{backgroundColor:colors.other["color6"],marginLeft:"750px",marginTop:"40px",width:"30%"}} sx={{ boxShadow: 3 }}>
             <img
                 alt="login"
@@ -110,6 +138,7 @@ const Login = () => {
                 )}
             </Formik>
         </Box>
+        </div>
     );
 };
 

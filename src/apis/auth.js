@@ -1,36 +1,36 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:8080/api/auth/";
+const API_URL = "https://localhost:8443/api/v1/auth/";
 
-const register = (username, email, password) => {
-    return axios.post(API_URL + "signup", {
-        username,
-        email,
-        password,
-    });
+//registration
+export const register = (values) => {
+    const token = JSON.parse(localStorage.getItem("token"));
+    return axios.post(API_URL + "sign_up", values, {
+            headers: {
+                'Authorization': "Bearer " + token,
+                "Content-Type": "application/json"
+            }
+        }
+    );
 };
 
-const login = (username, password) => {
-    return axios
-        .post(API_URL + "signin", {
-            username,
-            password,
-        })
-        .then((response) => {
-            if (response.data.accessToken) {
-                localStorage.setItem("user", JSON.stringify(response.data));
-            }
+//login
+export const login = (value) => {
 
+    return axios
+        .post(API_URL + "sign_in", value, {
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            }
+        )
+        .then((response) => {
+            if (response.data.jwt) {
+                localStorage.setItem("token", JSON.stringify(response.data.jwt));
+                localStorage.setItem("role", JSON.stringify(response.data.roles));
+            }
             return response.data;
         });
 };
 
-const logout = () => {
-    localStorage.removeItem("user");
-};
 
-export default {
-    register,
-    login,
-    logout,
-};
